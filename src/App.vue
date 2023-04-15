@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import useDev from "@/composables/useDev"
+const { isDev } = useDev();
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+  <v-app>
+    <v-app-bar>
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/galleries">Albums</RouterLink>
+        <RouterLink to="/editor" v-if="isDev">Editor</RouterLink>
       </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    </v-app-bar>
+    <v-main>
+      <RouterView />
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "couleurs-marseille",
+    "name": "Couleurs de Marseille",
+    "description": "Colours of Marseille",
+    "initialized": true,
+    "clean": true,
+    "titleImage": {
+      "gallery": "couleurs-marseille",
+      "filename": "IMG_6857.jpeg",
+      "thumbnail": "tn/tn_IMG_6857.jpeg",
+      "title": "",
+      "description": "",
+      "ctime": "2023-04-15T07:43:10.985Z",
+      "mtime": "2023-04-05T17:23:32.985Z",
+      "birthtime": "2023-04-05T17:23:32.847Z"
+    }
+  }
+]
