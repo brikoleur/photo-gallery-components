@@ -1,6 +1,5 @@
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-const currentGallery = ref();
 
 export interface GalleryImage {
     gallery : string;
@@ -9,10 +8,26 @@ export interface GalleryImage {
     title : string;
     description: string;
 }
-const galleryList = ref( [] );
-const allImages = ref( [] );
+export interface Gallery {
+    id : string;
+    title : string;
+    description : string;
+    size : number;
+    titleImage : GalleryImage;
+}
+const galleryList = ref( <Gallery[]> [] );
+const allGalleries = ref( new Map() );
+const allImages = ref( <GalleryImage[]> [] );
+const isInitialized = ref( false );
 export default function useGallery()
 {
+    const initialize = async ( force: boolean ) =>
+    {
+        if( !force && isInitialized.value ) return;
+        await loadGalleries();
+        await Promise.all( Array.from( galleryList.value ).map( gallery => loadGallery( gallery.id ) ) );
+        isInitialized.value = true;
+    };
     const currentGallery = computed( () =>
     {
         const route = useRoute();
@@ -25,33 +40,21 @@ export default function useGallery()
             return undefined;
         }
     } );
-    const galleryIndex = ref( [] );
     const loadGallery = async ( galleryName : string ) =>
     {
-        galleryIndex.value = await ( await fetch( `galleries/${galleryName}/index.json` ) ).json();
-        return galleryIndex.value;
+        allGalleries.value.set( galleryName, <GalleryImage[]> ( await ( await fetch( `galleries/${galleryName}/index.json` ) ).json() ) );
+        allImages.value.push( ...allGalleries.value.get( galleryName ) );
     };
     const loadGalleries = async () =>
     {
         galleryList.value = await ( await fetch( `galleries/index.json` ) ).json();
-        return galleryList.value;
     }
-    const loadAllImages = async () =>
-    {
-        const galleries = await loadGalleries();
-        for( const gallery of galleries )
-        {
-            allImages.value.push( ...( await loadGallery( gallery.id ) ) );
-        }
-        return allImages.value;
-    };
-    const isFullscreen = ref( false );
 
     const getImagePath = ( element: GalleryImage, thumbnail: boolean ) => {
         if( !element ) return "";
         return `galleries/${element.gallery}/${thumbnail ? element.thumbnail : element.filename}`
     }
     return {
-        loadAllImages, currentGallery, allImages, galleryIndex, galleryList, loadGallery, loadGalleries, isFullscreen, getImagePath, currentGallery
+        initialize, isInitialized, currentGallery, allImages, allGalleries, galleryList, getImagePath
     }
 }

@@ -6,9 +6,9 @@
   >
 
     <PCarousel
-        :gallery-name="galleryName"
+        :gallery-index="props.galleryIndex"
         :is-embedded="true"
-        :open-to="galleryIndex.indexOf( currentImage )"
+        :open-to="props.galleryIndex.indexOf( currentImage )"
         closable
         @close="closeImage"
     />
@@ -19,18 +19,19 @@
       class="fill-screen"
   >
     <p-gallery-editor
-        :gallery-index="galleryIndex"
-        :gallery-name="galleryName"
+        :gallery-index="props.galleryIndex"
+        :gallery-name="props.galleryName"
         @close="closeEditor"
     />
   </v-card>
   <v-sheet
       v-else
       class="d-flex flex-wrap mx-auto"
+      color="transparent"
       :max-width="props.maxWidth"
   >
     <v-btn
-        v-if="isDev"
+        v-if="isDev && props.galleryName"
         type="fab"
         icon="mdi-pencil"
         style="position:absolute;z-index:1000;"
@@ -38,7 +39,7 @@
         @click="showEditor = true"
     />
     <v-img
-        v-for="image of galleryIndex"
+        v-for="image of props.galleryIndex"
         :aspect-ratio="props.aspectRatio"
         :key="image.thumbnail"
         :src="getImagePath( image, true )"
@@ -57,17 +58,21 @@ import { computed, defineProps, onMounted, onUnmounted, ref } from "vue";
 import PCarousel from "./PCarousel.vue";
 import { useDisplay } from "vuetify";
 import PGalleryEditor from "@/components/edit/PGalleryEditor.vue";
-import useGallery from "@/composables/useGallery";
+import useGallery, { GalleryImage } from "@/composables/useGallery";
 
-const { loadGallery, getImagePath } = useGallery();
+const { getImagePath } = useGallery();
 const props = defineProps( {
     maxWidth : {
         type : Number,
         default : 900
     },
+    galleryIndex : {
+        type : Array,
+        required : true
+    },
     galleryName : {
         type : String,
-        required : true
+        required : false
     },
     imageClass : {
         type : String,
@@ -86,26 +91,15 @@ const props = defineProps( {
 const galleryIndex = ref( [] );
 const showCarousel = ref( false );
 const showEditor = ref( false );
-const currentImage = ref( undefined );
+const currentImage = ref();
 const carouselClass = ref( "o-0" );
 const isDev = import.meta.env.DEV;
-const filterIndex = ( n ) =>
-{
-    const out = [];
-    for( let i = 0; i < galleryIndex.value.length; i++ )
-    {
-        if( i % 9 === n ) out.push( galleryIndex.value[ i ] );
-    }
-    return out;
-}
-
 const closeEditor = () =>
 {
     showEditor.value = false;
-    loadGallery( props.galleryName ).then( data => galleryIndex.value = data );
 };
 
-const openImage = image =>
+const openImage = ( image: GalleryImage ) =>
 {
     currentImage.value = image;
     showCarousel.value = true;
@@ -132,7 +126,6 @@ const onKeyDown = ( evt : KeyboardEvent ) =>
 }
 onMounted( () =>
 {
-    loadGallery( props.galleryName ).then( gData => galleryIndex.value = gData );
     window.addEventListener( "keydown", onKeyDown );
 } );
 onUnmounted( () => window.removeEventListener( "keydown", onKeyDown ) )

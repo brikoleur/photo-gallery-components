@@ -1,21 +1,19 @@
 <template>
-  <v-sheet>
-    <div class="d-flex flex-wrap pa-2">
-      <PTitleImage v-for="galleryInfo of galleryList" :key="galleryInfo.id" :image-info="galleryInfo.titleImage" class="ma-2"
+  <v-sheet class="d-flex flex-wrap pa-2" color="transparent">
+    <v-card v-for="galleryInfo of galleryList" :key="galleryInfo.id" class="ma-2 pa-2">
+      <PTitleImage :image-info="galleryInfo.titleImage" style="cursor:pointer"
                      @click="openGallery( galleryInfo )"/>
-    </div>
+    </v-card>
   </v-sheet>
 </template>
 
 <script setup lang="ts">
-import useGallery from "@/composables/useGallery";
-import { onMounted } from "vue";
+import useGallery, { Gallery } from "@/composables/useGallery";
 import PTitleImage from "@/components/gallery/PTitleImage.vue";
 import { useRouter } from "vue-router";
-const { loadGalleries, galleryList, currentGallery } = useGallery();
-onMounted( () => loadGalleries() );
+const { galleryList } = useGallery();
 const router = useRouter();
-const openGallery = ( galleryInfo : Object ) =>
+const openGallery = ( galleryInfo : Gallery ) =>
 {
     router.push( {
         name : "gallery",

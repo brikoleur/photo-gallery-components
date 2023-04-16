@@ -1,6 +1,6 @@
 <template>
   <div style="position:absolute;top:10px;left:10px;width:100px;height:100px;z-index:999">
-    <img v-for="image of galleryIndex" :key="image.filename" :alt="image.title" :src="getImagePath( image, false )" height="100px"/>
+    <img v-for="image of props.galleryIndex" :key="image.filename" :alt="image.title" :src="getImagePath( image, false )" height="100px"/>
   </div>
   <v-card
     v-if="showEditor"
@@ -8,7 +8,7 @@
     class="fill-screen"
   >
     <p-gallery-editor
-      :gallery-index="galleryIndex"
+      :gallery-index="props.galleryIndex"
       :gallery-name="galleryName"
       @close="closeEditor"
     />
@@ -41,7 +41,7 @@
       :style="dimensions.width && `margin-left:auto;margin-right:auto;max-width: ${dimensions.width}px`"
     >
       <v-window-item
-        v-for="image of galleryIndex"
+        v-for="image of props.galleryIndex"
         :key="image.filename"
       >
         <v-card class="fill-height">
@@ -75,7 +75,7 @@ import { ref, onMounted, computed } from "vue";
 import { useDisplay } from "vuetify";
 import PGalleryEditor from "@/components/edit/PGalleryEditor.vue";
 import useGallery from "@/composables/useGallery";
-const { loadGallery, getImagePath } = useGallery();
+const { getImagePath } = useGallery();
 const imgMaxHeight = ref( window.innerHeight - 400 );
 const props = defineProps( {
     isEmbedded : Boolean,
@@ -84,9 +84,13 @@ const props = defineProps( {
         type : Number,
         default : 0
     },
+    galleryIndex : {
+        type : Array,
+        required : true
+    },
     galleryName : {
         type : String,
-        required : true
+        required : false
     },
     lgHeight : {
         type : Number,
@@ -107,23 +111,21 @@ const props = defineProps( {
 } );
 defineEmits( [ "close" ] );
 const isDev = import.meta.env.DEV;
-const galleryIndex = ref( [] );
 const showEditor = ref( false );
 const current = ref( props.openTo );
 const MARGIN_Y = 150;
 const next = () => {
     current.value += 1;
-    if( current.value === galleryIndex.value.length ) current.value = 0;
+    if( current.value === props.galleryIndex.length ) current.value = 0;
 };
 const prev = () =>
 {
     current.value -= 1;
-    if( current.value === -1 ) current.value = galleryIndex.value.length - 1;
+    if( current.value === -1 ) current.value = props.galleryIndex.length - 1;
 };
 const closeEditor = () =>
 {
     showEditor.value = false;
-    loadGallery( props.galleryName ).then( data => galleryIndex.value = data );
 };
 
 const dimensions = computed( () =>
@@ -146,10 +148,6 @@ const onResize = () => {
     else imgMaxHeight.value = window.innerHeight - 2 * MARGIN_Y;
 };
 
-onMounted( () =>
-{
-    loadGallery( props.galleryName ).then( data => galleryIndex.value = data );
-} );
 </script>
 
 <style scoped>

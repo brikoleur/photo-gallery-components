@@ -16,20 +16,17 @@
 
 <script setup lang="ts">
 import useGallery from "@/composables/useGallery";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 
-const { getImagePath, galleryIndex, loadGallery } = useGallery();
+const { getImagePath, allGalleries } = useGallery();
 defineEmits( [ "close", "select" ] );
 const props = defineProps( {
-    gallery : {
+    galleryId : {
         type : String,
         required : true
     }
 } );
-onMounted( () =>
-{
-    loadGallery( props.gallery );
-} );
+const galleryIndex = computed( () => allGalleries.value.get( props.galleryId ))
 
 </script>
 

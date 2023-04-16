@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main class="p-background">
       <v-row no-gutters v-if="headerContent === 'header-images'">
         <v-col cols="3">
           <v-img cover :src="randomImages[ 0 ]" height="250" class="image-class"/>
@@ -14,44 +14,71 @@
         <v-col cols="3">
           <v-img cover :src="randomImages[ 3 ]" height="250" class="image-class"/>
         </v-col>
-        <div class="gallery-text"/>
+        <div class="gallery-text">
+          <div class="text-white mx-auto" style="position:relative;height:100px;max-width:1800px;">
+            <div>
+              <v-avatar image="assets/profile.jpeg" :size="80" class="float-left ma-2"/>
+              <div class="pt-8">
+                <div class="text-h6">{{ aboutInfo?.name }}</div>
+                <div class="text-body-2">{{ aboutInfo?.about }}</div>
+              </div>
+            </div>
+            <div style="position:absolute;bottom:20px;right:20px">
+              <span v-if="route.name === 'galleries'">
+                {{ allGalleries.size }} albums
+              </span>
+              <span v-else>
+                {{ allImages.length }} photos
+              </span>
+            </div>
+          </div>
+        </div>
       </v-row>
-      <v-sheet v-else :max-width="1800" :height="250" cover class="mx-auto">
+      <v-sheet v-else :max-width="1800" :height="250" class="mx-auto" color="transparent">
         <v-img cover :src="getImagePath( currentGallery?.titleImage, false )"/>
-        <div class="gallery-text text-white mx-auto pa-4" style="max-width:1800px">
-          <div class="text-h5">{{ currentGallery.name }}</div>
-          <div class="text-body-1">{{ currentGallery.description }}</div>
+        <div v-if="currentGallery" class="gallery-text text-white mx-auto pa-4 pt-6 pl-8" style="max-width:1800px">
+          <div class="text-h6">{{ currentGallery.name }}</div>
+          <div class="text-body-2">{{ currentGallery.description }}</div>
           <div style="position:absolute;bottom:20px;right:20px">
             {{ currentGallery.size }} photos
           </div>
         </div>
       </v-sheet>
-      <v-toolbar>
-        <v-toolbar-items style="max-width:1800px" class="mx-auto text-left">
-          <v-btn to="/">Home</v-btn>
-          <v-btn to="/galleries">Albums</v-btn>
-          <v-btn to="/editor" v-if="isDev">Editor</v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <RouterView />
+      <v-card :rounded="0" color="white">
+        <v-toolbar v-if="route.name !== 'gallery'" class="mx-auto" style="max-width: 1800px" color="white" :height="40">
+          <v-toolbar-items>
+            <v-btn to="/">Photostream</v-btn>
+            <v-btn to="/galleries">Albums</v-btn>
+            <v-btn to="/editor" v-if="isDev">Editor</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-toolbar v-else class="mx-auto" style="max-width: 1800px" color="white" :height="40">
+          <v-toolbar-items>
+            <v-btn to="/galleries">
+              <v-icon icon="mdi-arrow-left" class="mr-1"/>
+              Back to Albums
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+      </v-card>
+      <RouterView/>
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import useDev from "@/composables/useDev"
 import useGallery from "@/composables/useGallery";
 import { computed, onBeforeMount, ref } from "vue";
-const { loadAllImages, allImages, getImagePath, loadGalleries, currentGallery, galleryList } = useGallery();
+
+const { initialize, allImages, allGalleries, getImagePath, currentGallery } = useGallery();
 const { isDev } = useDev();
-const randomImages = ref( [] );
+const randomImages = ref<string[]>( [] );
 const route = useRoute();
+const aboutInfo = ref();
 const headerContent = computed( () =>
 {
-
-    console.log( "check header content", route.name )
-
     if( route.name === "gallery" )
     {
         return "gallery-image";
@@ -61,38 +88,29 @@ const headerContent = computed( () =>
         return "header-images";
     }
 } );
-const currentGalleryTitleImage = computed( () =>
+onBeforeMount( async() =>
 {
-    return getImagePath( currentGallery.value?.titleImage, false );
-} );
-onBeforeMount( async () =>
-{
-    await loadGalleries();
-    await loadAllImages();
+    const resp = await fetch( '/about.json' );
+    aboutInfo.value = await resp.json();
+    await initialize( false );
     const indices = [ Math.floor( Math.random() * allImages.value.length ) ];
-    let idx = Math.random() * allImages.value.length;
-    while( indices.length < 6 )
+    while( indices.length < 6 && allImages.value.length >= 6 )
     {
-        idx = Math.floor( Math.random() * allImages.value.length );
+        const idx = Math.floor( Math.random() * allImages.value.length );
         if( !indices.includes( idx ) ) indices.push( idx );
     }
     randomImages.value = indices.map( i => getImagePath( allImages.value[ i ], false ) );
-    console.log( "ITS", indices, randomImages.value )
-} )
+} );
 </script>
 
 <style scoped>
 .gallery-text {
-       position: absolute;
-       top: 150px;
-       left: 0;
-       right: 0;
-       height: 100px;
-       box-sizing:border-box;
-       background: linear-gradient(0deg, rgba(0, 0, 0, 75%) 0%, rgba(0, 0, 0, 0) 100%);
-   }
-.image-class {
-    /*filter:grayscale( 75% )*/
+    position: absolute;
+    top: 150px;
+    height: 100px;
+    width: 100%;
+    box-sizing: border-box;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 75%) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 </style>

@@ -1,9 +1,11 @@
 <template>
-  <PPhotoStream/>
+  <PMosaic :gallery-index="allImages" :max-width="1800" :aspect-ratio="1" cover/>
 </template>
 
 <script setup lang="ts">
-import PPhotoStream from "@/components/gallery/PPhotoStream.vue";
+import PMosaic from "@/components/gallery/PMosaic.vue";
+import useGallery from "@/composables/useGallery";
+const { allImages } = useGallery();
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-<v-sheet :max-width="1800" class="mx-auto">
+<v-sheet :max-width="1800" class="mx-auto"  color="transparent">
   <PGalleries/>
 </v-sheet>
 </template>

@@ -15,7 +15,7 @@
     style="overflow-y:auto;width:100%;height:100%;"
     class="pa-4 mt-12"
   >
-    <v-card-title class="d-flex">Edit album <v-spacer/><v-icon @click="emit( 'close' )" icon="mdi-close"></v-icon></v-card-title>
+    <v-card-title class="d-flex">Edit album <v-spacer/><v-icon @click="updateAndClose" icon="mdi-close"></v-icon></v-card-title>
     <draggable
       v-model="galleryIndex"
       group="people"
@@ -41,12 +41,10 @@
               <v-text-field
                 v-model="element.title"
                 label="Title"
-                @change="updateGalleryIndex"
               />
               <v-textarea
                 v-model="element.description"
                 label="Description"
-                @change="updateGalleryIndex"
               />
             </v-col>
           </v-row>
@@ -62,31 +60,31 @@ import { computed, ref } from "vue";
 import useGallery from "@/composables/useGallery";
 
 const props = defineProps( {
-    galleryIndex : {
-        type : Array,
-        required : true
-    },
     galleryName : {
         type : String,
         required : true
     },
     modelValue : Boolean
 } );
+const { getImagePath, allGalleries, initialize } = useGallery();
 const drag = ref( false );
 const dragStyle = computed( () =>
 {
     return drag.value ? "cursor:grabbing" : "cursor:grab"
 } );
 const emit = defineEmits( [ "close" ] );
-const galleryIndex = ref( props.galleryIndex );
-const showOkMessage = ref( false );
+const galleryIndex = ref( allGalleries.value.get( props.galleryName ) );
 const showErrorMessage = ref( false );
-const { getImagePath } = useGallery();
 const onEndDrag = () =>
 {
     drag.value = false;
-    updateGalleryIndex();
 }
+const updateAndClose = async () =>
+{
+    await updateGalleryIndex();
+    await initialize( true );
+    emit( "close" );
+};
 const updateGalleryIndex = async () =>
 {
     try
