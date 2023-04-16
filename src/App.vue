@@ -51,6 +51,13 @@
             <v-btn to="/galleries">Albums</v-btn>
             <v-btn to="/editor" v-if="isDev">Editor</v-btn>
           </v-toolbar-items>
+          <v-spacer/>
+          <div class="pt-2">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="This work is licensed under a Creative Commons Attribution 4.0 International License"
+                   style="border-width:0"
+                   src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
+          </div>
         </v-toolbar>
         <v-toolbar v-else class="mx-auto" style="max-width: 1800px" color="white" :height="40">
           <v-toolbar-items>
@@ -59,6 +66,13 @@
               Back to Albums
             </v-btn>
           </v-toolbar-items>
+          <v-spacer/>
+          <div class="pt-2">
+            <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+              <img alt="This work is licensed under a Creative Commons Attribution 4.0 International License"
+                   style="border-width:0"
+                   src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
+          </div>
         </v-toolbar>
       </v-card>
       <RouterView/>
