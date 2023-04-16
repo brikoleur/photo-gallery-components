@@ -117,9 +117,12 @@ app.get( '/galleries', async ( req, res ) =>
                     outGallery.name = gallery.name;
                     outGallery.description = gallery.description;
                     outGallery.titleImage = gallery.titleImage;
+                    outGallery.size = gallery.size;
                 }
             }
-            out.sort( ( a, b ) => galleries.findIndex( gall => gall.id === a.id ) < galleries.findIndex( gall => gall.id === b.id ) );
+            out.sort( ( a, b ) => {
+                return galleries.findIndex( gall => gall.id === a.id ) - galleries.findIndex( gall => gall.id === b.id );
+            } );
         }
         res.send( result );
     }

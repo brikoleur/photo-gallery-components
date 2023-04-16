@@ -1,8 +1,9 @@
 <template>
-<p>This is my home view</p>
+  <PPhotoStream/>
 </template>
 
 <script setup lang="ts">
+import PPhotoStream from "@/components/gallery/PPhotoStream.vue";
 </script>
 
 <style scoped>

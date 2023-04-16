@@ -1,29 +1,5 @@
 <template>
   <v-card
-    flat
-    style="position:fixed;top:5px;right:5px;z-index:999;width:100%"
-    class="pa-1 d-flex"
-  >
-    <div class="px-8 text-h5">
-      Edit gallery "{{ galleryName }}"
-    </div>
-    <v-spacer />
-    <v-btn
-      size="small"
-      color="primary"
-      class="mr-2"
-      @click="updateGalleryIndex"
-    >
-      Save
-    </v-btn>
-    <v-btn
-      size="small"
-      @click="$emit( 'close' )"
-    >
-      Close
-    </v-btn>
-  </v-card>
-  <v-card
     v-if="showErrorMessage"
     color="error"
     width="300"
@@ -39,13 +15,14 @@
     style="overflow-y:auto;width:100%;height:100%;"
     class="pa-4 mt-12"
   >
+    <v-card-title class="d-flex">Edit album <v-spacer/><v-icon @click="emit( 'close' )" icon="mdi-close"></v-icon></v-card-title>
     <draggable
       v-model="galleryIndex"
       group="people"
       item-key="filename"
       :style="dragStyle"
       @start="drag = true"
-      @end="drag = false"
+      @end="onEndDrag"
     >
       <template #item="{element}">
         <v-card
@@ -56,7 +33,7 @@
           >
             <v-col cols="4">
               <v-img
-                :src="element.thumbnail"
+                :src="getImagePath( element, true )"
                 style="max-height:300px"
               />
             </v-col>
@@ -64,10 +41,12 @@
               <v-text-field
                 v-model="element.title"
                 label="Title"
+                @change="updateGalleryIndex"
               />
               <v-textarea
                 v-model="element.description"
                 label="Description"
+                @change="updateGalleryIndex"
               />
             </v-col>
           </v-row>
@@ -80,6 +59,7 @@
 <script setup>
 import draggable from "vuedraggable";
 import { computed, ref } from "vue";
+import useGallery from "@/composables/useGallery";
 
 const props = defineProps( {
     galleryIndex : {
@@ -101,6 +81,12 @@ const emit = defineEmits( [ "close" ] );
 const galleryIndex = ref( props.galleryIndex );
 const showOkMessage = ref( false );
 const showErrorMessage = ref( false );
+const { getImagePath } = useGallery();
+const onEndDrag = () =>
+{
+    drag.value = false;
+    updateGalleryIndex();
+}
 const updateGalleryIndex = async () =>
 {
     try
@@ -117,11 +103,7 @@ const updateGalleryIndex = async () =>
         } );
 
         const res = await resp.json();
-        if( res.result === "success" )
-        {
-            emit( "close" );
-        }
-        else
+        if( res.result !== "success" )
         {
             console.error( res );
             showErrorMessage.value = true;

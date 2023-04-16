@@ -6,22 +6,11 @@
   >
 
     <PCarousel
-        :gallery-name="galleryName"
+        :gallery-name="currentImage.gallery"
         :is-embedded="true"
         :open-to="galleryIndex.indexOf( currentImage )"
         closable
         @close="closeImage"
-    />
-  </v-card>
-  <v-card
-      v-else-if="showEditor"
-      flat
-      class="fill-screen"
-  >
-    <p-gallery-editor
-        :gallery-index="galleryIndex"
-        :gallery-name="galleryName"
-        @close="closeEditor"
     />
   </v-card>
   <v-sheet
@@ -29,16 +18,8 @@
       class="d-flex flex-wrap mx-auto"
       :max-width="props.maxWidth"
   >
-    <v-btn
-        v-if="isDev"
-        type="fab"
-        icon="mdi-pencil"
-        style="position:absolute;z-index:1000;"
-        class="ml-4 mt-4"
-        @click="showEditor = true"
-    />
     <v-img
-        v-for="image of galleryIndex"
+        v-for="image of allImages"
         :aspect-ratio="props.aspectRatio"
         :key="image.thumbnail"
         :src="getImagePath( image, true )"
@@ -59,15 +40,11 @@ import { useDisplay } from "vuetify";
 import PGalleryEditor from "@/components/edit/PGalleryEditor.vue";
 import useGallery from "@/composables/useGallery";
 
-const { loadGallery, getImagePath } = useGallery();
+const { loadAllImages, allImages, getImagePath } = useGallery();
 const props = defineProps( {
     maxWidth : {
         type : Number,
         default : 900
-    },
-    galleryName : {
-        type : String,
-        required : true
     },
     imageClass : {
         type : String,
@@ -85,26 +62,9 @@ const props = defineProps( {
 } );
 const galleryIndex = ref( [] );
 const showCarousel = ref( false );
-const showEditor = ref( false );
 const currentImage = ref( undefined );
 const carouselClass = ref( "o-0" );
-const isDev = import.meta.env.DEV;
-const filterIndex = ( n ) =>
-{
-    const out = [];
-    for( let i = 0; i < galleryIndex.value.length; i++ )
-    {
-        if( i % 9 === n ) out.push( galleryIndex.value[ i ] );
-    }
-    return out;
-}
-
-const closeEditor = () =>
-{
-    showEditor.value = false;
-    loadGallery( props.galleryName ).then( data => galleryIndex.value = data );
-};
-
+const galleryName = ref( "" );
 const openImage = image =>
 {
     currentImage.value = image;
@@ -130,9 +90,9 @@ const onKeyDown = ( evt : KeyboardEvent ) =>
 {
     if( evt.key === "Escape" ) closeImage()
 }
-onMounted( () =>
+onMounted( async () =>
 {
-    loadGallery( props.galleryName ).then( gData => galleryIndex.value = gData );
+    await loadAllImages();
     window.addEventListener( "keydown", onKeyDown );
 } );
 onUnmounted( () => window.removeEventListener( "keydown", onKeyDown ) )

@@ -2,18 +2,37 @@
   {
     "id": "couleurs-marseille",
     "name": "Couleurs de Marseille",
-    "description": "Colours of Marseille",
+    "description": "Marseille is a city of graffitis. Here is a showcase.",
     "initialized": true,
     "clean": true,
     "titleImage": {
       "gallery": "couleurs-marseille",
-      "filename": "IMG_6857.jpeg",
-      "thumbnail": "tn/tn_IMG_6857.jpeg",
-      "title": "",
+      "filename": "IMG_7066.jpeg",
+      "thumbnail": "tn/tn_IMG_7066.jpeg",
+      "title": "Couleurs de Marseille",
       "description": "",
-      "ctime": "2023-04-15T07:43:10.985Z",
-      "mtime": "2023-04-05T17:23:32.985Z",
-      "birthtime": "2023-04-05T17:23:32.847Z"
-    }
+      "ctime": "2023-04-15T07:43:10.875Z",
+      "mtime": "2023-04-05T17:23:38.669Z",
+      "birthtime": "2023-04-05T17:23:38.542Z"
+    },
+    "size": 19
+  },
+  {
+    "id": "bonnieux",
+    "name": "Bonnieux",
+    "description": "Bonnieux and Around",
+    "initialized": true,
+    "clean": true,
+    "titleImage": {
+      "gallery": "bonnieux",
+      "filename": "IMG_4782.jpeg",
+      "thumbnail": "tn/tn_IMG_4782.jpeg",
+      "title": "Bonnieux",
+      "description": "",
+      "ctime": "2023-04-15T09:58:45.152Z",
+      "mtime": "2023-04-12T08:48:34.222Z",
+      "birthtime": "2023-04-12T08:48:34.222Z"
+    },
+    "size": 7
   }
 ]

@@ -8,8 +8,6 @@ const ROOT_PATH = path.resolve( config.get( "gallery" ).root_fs_path );
 const initGallery = async ( galleryName = [] ) =>
 {
 
-    console.log( "ITS", galleryName )
-
     const tester = /^.+\.(jpe?g|JPE?G)$/;
     const gPath = path.resolve( ROOT_PATH, galleryName );
     if( !( await fs.stat( gPath ) ) ) throw new Error( `Gallery ${galleryName} not found.` );
@@ -52,7 +50,7 @@ const initGallery = async ( galleryName = [] ) =>
             image.mtime = stats.mtime;
             image.birthtime = stats.birthtime;
             const img = await Jimp.read( path.resolve( ROOT_PATH, image.gallery, image.filename ) );
-            await img.cover( 400, 400 ).write( path.resolve( ROOT_PATH, image.gallery, image.thumbnail ) );
+            await img.resize( 400, Jimp.AUTO ).write( path.resolve( ROOT_PATH, image.gallery, image.thumbnail ) );
             console.info( `Created thumbnail: ${image.thumbnail}` );
         }
         catch( e )
