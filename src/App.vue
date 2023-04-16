@@ -3,16 +3,16 @@
     <v-main class="p-background">
       <v-row no-gutters v-if="headerContent === 'header-images'">
         <v-col cols="3">
-          <v-img cover :src="randomImages[ 0 ]" height="250" class="image-class"/>
+          <v-img cover :src="randomImages[ 0 ]" height="275" class="image-class"/>
         </v-col>
         <v-col cols="3">
-          <v-img cover :src="randomImages[ 1 ]" height="250" class="image-class"/>
+          <v-img cover :src="randomImages[ 1 ]" height="275" class="image-class"/>
         </v-col>
         <v-col cols="3">
-          <v-img cover :src="randomImages[ 2 ]" height="250" class="image-class"/>
+          <v-img cover :src="randomImages[ 2 ]" height="275" class="image-class"/>
         </v-col>
         <v-col cols="3">
-          <v-img cover :src="randomImages[ 3 ]" height="250" class="image-class"/>
+          <v-img cover :src="randomImages[ 3 ]" height="275" class="image-class"/>
         </v-col>
         <div class="gallery-text">
           <div class="text-white mx-auto" style="position:relative;height:100px;max-width:1800px;">
@@ -34,7 +34,7 @@
           </div>
         </div>
       </v-row>
-      <v-sheet v-else :max-width="1800" :height="250" class="mx-auto" color="transparent">
+      <v-sheet v-else :max-width="1800" :height="275" class="mx-auto" color="transparent">
         <v-img cover :src="getImagePath( currentGallery?.titleImage, false )"/>
         <div v-if="currentGallery" class="gallery-text text-white mx-auto pa-4 pt-6 pl-8" style="max-width:1800px">
           <div class="text-h6">{{ currentGallery.name }}</div>
@@ -106,7 +106,7 @@ onBeforeMount( async() =>
 <style scoped>
 .gallery-text {
     position: absolute;
-    top: 150px;
+    top: 175px;
     height: 100px;
     width: 100%;
     box-sizing: border-box;
