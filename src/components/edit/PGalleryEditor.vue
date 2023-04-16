@@ -57,7 +57,7 @@
 <script setup>
 import draggable from "vuedraggable";
 import { computed, ref } from "vue";
-import useGallery from "@/composables/useGallery";
+import useGallery from "../../composables/useGallery";
 
 const props = defineProps( {
     galleryName : {

@@ -1,4 +1,7 @@
 {
+  "server": {
+    "port": 8080
+  },
   "gallery": {
     "root_fs_path": "public/galleries",
     "root_url_path": "galleries"

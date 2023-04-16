@@ -8,11 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import useGallery, { Gallery } from "@/composables/useGallery";
-import PTitleImage from "@/components/gallery/PTitleImage.vue";
-import { useRouter } from "vue-router";
+import useGallery from "../../composables/useGallery";
+import PTitleImage from "../gallery/PTitleImage.vue";
+import { inject } from 'vue'
+import type { Gallery } from "../../index";
 const { galleryList } = useGallery();
-const router = useRouter();
+const router = inject( "router" );
 const openGallery = ( galleryInfo : Gallery ) =>
 {
     router.push( {

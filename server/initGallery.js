@@ -65,4 +65,4 @@ const initGallery = async ( galleryName = [] ) =>
     await fs.writeFile( indexPath, JSON.stringify( galleryIndex, undefined, 2 ) );
     return galleryIndex;
 };
-module.exports = initGallery;
+export default initGallery;

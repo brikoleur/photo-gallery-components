@@ -10,7 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import useGallery, { GalleryImage } from "@/composables/useGallery";
+import useGallery from "../../composables/useGallery";
+import type { GalleryImage } from "../../index";
 import { computed, PropType } from "vue";
 const props = defineProps( {
     imageInfo : {

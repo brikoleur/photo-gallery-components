@@ -17,24 +17,5 @@
     },
     "size": 7,
     "title": "Bonnieux"
-  },
-  {
-    "id": "couleurs-marseille",
-    "name": "Couleurs de Marseille",
-    "description": "Marseille is a city of graffitis. Here is a showcase.",
-    "initialized": true,
-    "clean": true,
-    "titleImage": {
-      "gallery": "couleurs-marseille",
-      "filename": "IMG_7066.jpeg",
-      "thumbnail": "tn/tn_IMG_7066.jpeg",
-      "description": "19 photos",
-      "ctime": "2023-04-15T07:43:10.875Z",
-      "mtime": "2023-04-05T17:23:38.669Z",
-      "birthtime": "2023-04-05T17:23:38.542Z",
-      "title": "Couleurs de Marseille"
-    },
-    "size": 19,
-    "title": "Couleurs de Marseille"
   }
 ]

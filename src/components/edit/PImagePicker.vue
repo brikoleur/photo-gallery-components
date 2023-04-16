@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import useGallery from "@/composables/useGallery";
-import { computed, onMounted } from "vue";
+import useGallery from "../../composables/useGallery";
+import { computed } from "vue";
 
 const { getImagePath, allGalleries } = useGallery();
 defineEmits( [ "close", "select" ] );

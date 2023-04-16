@@ -10,6 +10,7 @@
         :is-embedded="true"
         :open-to="props.galleryIndex.indexOf( currentImage )"
         closable
+        class="fill-screen"
         @close="closeImage"
     />
   </v-card>
@@ -57,9 +58,9 @@
 import { computed, defineProps, onMounted, onUnmounted, ref } from "vue";
 import PCarousel from "./PCarousel.vue";
 import { useDisplay } from "vuetify";
-import PGalleryEditor from "@/components/edit/PGalleryEditor.vue";
-import useGallery, { GalleryImage } from "@/composables/useGallery";
-
+import PGalleryEditor from "../edit/PGalleryEditor.vue";
+import useGallery from "../../composables/useGallery";
+import type { GalleryImage } from "../../index.d";
 const { getImagePath } = useGallery();
 const props = defineProps( {
     maxWidth : {
@@ -88,7 +89,6 @@ const props = defineProps( {
     },
     cover : Boolean
 } );
-const galleryIndex = ref( [] );
 const showCarousel = ref( false );
 const showEditor = ref( false );
 const currentImage = ref();

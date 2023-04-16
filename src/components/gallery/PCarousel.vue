@@ -1,4 +1,8 @@
 <template>
+  <!-- preload thumbnails -->
+  <div style="position:absolute;bottom:0;right:0;width:1px;height:1px;visibility:hidden;">
+    <img v-for="image of props.galleryIndex" :key="image.thumbnail" :src="getImagePath( image, true )" alt=""/>
+  </div>
   <v-card
     v-if="showEditor"
     flat
@@ -13,7 +17,6 @@
   <v-card
     v-else
     flat
-    class="fill-screen"
     v-resize="onResize"
   >
     <v-icon v-if="closable"
@@ -68,10 +71,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
-import PGalleryEditor from "@/components/edit/PGalleryEditor.vue";
-import useGallery from "@/composables/useGallery";
+import PGalleryEditor from "../edit/PGalleryEditor.vue";
+import useGallery from "../../composables/useGallery";
 const { getImagePath } = useGallery();
 const imgMaxHeight = ref( window.innerHeight - 400 );
 const props = defineProps( {
@@ -104,13 +107,17 @@ const props = defineProps( {
     smWidth : {
         type : Number,
         required : false
+    },
+    showText : {
+        type : Boolean,
+        default : true
     }
 } );
 defineEmits( [ "close" ] );
 const isDev = import.meta.env.DEV;
 const showEditor = ref( false );
 const current = ref( props.openTo );
-const MARGIN_Y = 150;
+const MARGIN_Y = props.showText ? 150 : 0;
 const next = () => {
     current.value += 1;
     if( current.value === props.galleryIndex.length ) current.value = 0;
