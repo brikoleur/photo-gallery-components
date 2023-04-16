@@ -1,7 +1,4 @@
 <template>
-  <div style="position:absolute;top:10px;left:10px;width:100px;height:100px;z-index:999">
-    <img v-for="image of props.galleryIndex" :key="image.filename" :alt="image.title" :src="getImagePath( image, false )" height="100px"/>
-  </div>
   <v-card
     v-if="showEditor"
     flat
@@ -53,7 +50,7 @@
               <v-sheet :height="MARGIN_Y">
               </v-sheet>
               <v-sheet>
-              <v-img eager contain :lazy-src="getImagePath( image, false )" :src="getImagePath( image, false )" :max-height="imgMaxHeight"/>
+              <v-img eager contain :lazy-src="getImagePath( image, true )" :src="getImagePath( image, false )" :max-height="imgMaxHeight"/>
               </v-sheet>
               <v-sheet :height="MARGIN_Y" class="text-center">
                 <div class="text-h5 mt-4 mb-1">{{ image.title }}</div>
