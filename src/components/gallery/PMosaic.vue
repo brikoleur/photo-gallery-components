@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import PCarousel from "./PCarousel.vue";
 import { useDisplay } from "vuetify";
 import PGalleryEditor from "../edit/PGalleryEditor.vue";

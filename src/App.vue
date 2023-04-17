@@ -1,7 +1,17 @@
 <template>
   <v-app>
     <v-main class="p-background">
-      <v-row no-gutters v-if="headerContent === 'header-images'">
+      <v-sheet v-if="currentGallery" :max-width="1800" :height="275" class="mx-auto" color="transparent">
+        <v-img cover :src="getImagePath( currentGallery.titleImage, false )" class="album-title-image"/>
+        <div class="gallery-text text-white mx-auto pa-4 pt-6 pl-8" style="max-width:1800px">
+          <div class="text-h6">{{ currentGallery.title }}</div>
+          <div class="text-body-2">{{ currentGallery.description }}</div>
+          <div style="position:absolute;bottom:20px;right:20px">
+            {{ currentGallery.size }} photos
+          </div>
+        </div>
+      </v-sheet>
+      <v-row no-gutters v-else>
         <v-col cols="3">
           <v-img cover :src="randomImages[ 0 ]" height="275" class="image-class"/>
         </v-col>
@@ -34,16 +44,6 @@
           </div>
         </div>
       </v-row>
-      <v-sheet v-else :max-width="1800" :height="275" class="mx-auto" color="transparent">
-        <v-img cover :src="getImagePath( currentGallery?.titleImage, false )"/>
-        <div v-if="currentGallery" class="gallery-text text-white mx-auto pa-4 pt-6 pl-8" style="max-width:1800px">
-          <div class="text-h6">{{ currentGallery.name }}</div>
-          <div class="text-body-2">{{ currentGallery.description }}</div>
-          <div style="position:absolute;bottom:20px;right:20px">
-            {{ currentGallery.size }} photos
-          </div>
-        </div>
-      </v-sheet>
       <v-card :rounded="0" color="white">
         <v-toolbar v-if="route.name !== 'gallery'" class="mx-auto" style="max-width: 1800px" color="white" :height="40">
           <v-toolbar-items>
@@ -52,7 +52,7 @@
             <v-btn to="/editor" v-if="isDev">Editor</v-btn>
           </v-toolbar-items>
           <v-spacer/>
-          <div class="pt-2">
+          <div style="padding-top:6px;margin-right:8px;">
             <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
               <img alt="This work is licensed under a Creative Commons Attribution 4.0 International License"
                    style="border-width:0"
@@ -67,7 +67,7 @@
             </v-btn>
           </v-toolbar-items>
           <v-spacer/>
-          <div class="pt-2">
+          <div style="padding-top:6px;margin-right:8px;">
             <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
               <img alt="This work is licensed under a Creative Commons Attribution 4.0 International License"
                    style="border-width:0"
@@ -81,25 +81,28 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
-import useDev from "@/composables/useDev"
-import useGallery from "@/composables/useGallery";
+import { RouterView, useRouter, useRoute } from 'vue-router';
+import useDev from "./composables/useDev";
+import useGallery from "./composables/useGallery";
 import { computed, onBeforeMount, ref } from "vue";
-
-const { initialize, allImages, allGalleries, getImagePath, currentGallery } = useGallery();
+import { provide } from "vue";
+import type { Gallery } from "@/index.d"; // How to use this directly from the photo-gallery-components module?
+provide( "router", useRouter() );
+const { initialize, allImages, allGalleries, getImagePath, galleryList } = useGallery();
 const { isDev } = useDev();
 const randomImages = ref<string[]>( [] );
 const route = useRoute();
 const aboutInfo = ref();
-const headerContent = computed( () =>
+const currentGallery = computed( () =>
 {
+    const route = useRoute();
     if( route.name === "gallery" )
     {
-        return "gallery-image";
+        return galleryList.value.find( ( entity : Gallery ) => entity.id === route.query.gallery );
     }
     else
     {
-        return "header-images";
+        return undefined;
     }
 } );
 onBeforeMount( async() =>
@@ -126,5 +129,10 @@ onBeforeMount( async() =>
     box-sizing: border-box;
     background: linear-gradient(0deg, rgba(0, 0, 0, 75%) 0%, rgba(0, 0, 0, 0) 100%);
 }
+
+.album-title-image {
+    filter: blur(3px)
+}
+
 
 </style>

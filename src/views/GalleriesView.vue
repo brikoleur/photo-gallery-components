@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import PGalleries from "@/components/gallery/PGalleries.vue";
+import PGalleries from "../components/gallery/PGalleries.vue";
 </script>
 
 <style scoped>

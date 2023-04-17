@@ -1,11 +1,11 @@
-export declare interface GalleryImage {
+export interface GalleryImage {
     gallery : string;
     filename : string;
     thumbnail : string;
     title : string;
     description: string;
 }
-export declare interface Gallery {
+export interface Gallery {
     id : string;
     title : string;
     description : string;

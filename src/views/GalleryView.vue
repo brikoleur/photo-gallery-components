@@ -3,13 +3,13 @@
 </template>
 
 <script setup lang="ts">
-import PMosaic from "@/components/gallery/PMosaic.vue";
+import PMosaic from "../components/gallery/PMosaic.vue";
 import { useRoute } from "vue-router";
-import useGallery, { Gallery, GalleryImage } from "@/composables/useGallery";
+import useGallery from "../composables/useGallery";
 import { ref, watch } from "vue";
 const route = useRoute();
 const { allGalleries, isInitialized } = useGallery();
-const galleryId = <string> route.query.gallery;
+const galleryId = route.query.gallery;
 const galleryIndex = ref( allGalleries.value.get( galleryId ) );
 const amInitialized = ref( isInitialized.value );
 watch( isInitialized, () =>

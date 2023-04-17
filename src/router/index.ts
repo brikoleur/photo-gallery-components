@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from "@/views/HomeView.vue"
+import HomeView from "../views/HomeView.vue"
 
 const router = createRouter( {
     history : createWebHashHistory( import.meta.env.BASE_URL ),
@@ -12,7 +12,7 @@ const router = createRouter( {
         {
             path : '/editor',
             name : 'editor',
-            component : () => import( "@/views/GalleriesEditorView.vue" )
+            component : () => import( "../views/GalleriesEditorView.vue" )
         },
         {
             path : '/galleries',
@@ -20,12 +20,12 @@ const router = createRouter( {
             // route level code-splitting
             // this generates a separate chunk (About.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
-            component : () => import( "@/views/GalleriesView.vue" )
+            component : () => import( "../views/GalleriesView.vue" )
         },
         {
             path : '/gallery',
             name : "gallery",
-            component : () => import( "@/views/GalleryView.vue" )
+            component : () => import( "../views/GalleryView.vue" )
         }
     ]
 } )

@@ -7,8 +7,7 @@
     style="position:fixed;top:20px;right:20px;z-index:99999999"
     @click="showErrorMessage = false"
   >
-    An error occurred updating data - is
-    the server on?
+    An error occurred connecting to the development server - is it running?
   </v-card>
   <v-card
     flat
@@ -56,8 +55,9 @@
 
 <script setup>
 import draggable from "vuedraggable";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import useGallery from "../../composables/useGallery";
+import useDev from "../../composables/useDev";
 
 const props = defineProps( {
     galleryName : {
@@ -67,6 +67,7 @@ const props = defineProps( {
     modelValue : Boolean
 } );
 const { getImagePath, allGalleries, initialize } = useGallery();
+const { serverRunning } = useDev();
 const drag = ref( false );
 const dragStyle = computed( () =>
 {
@@ -75,6 +76,13 @@ const dragStyle = computed( () =>
 const emit = defineEmits( [ "close" ] );
 const galleryIndex = ref( allGalleries.value.get( props.galleryName ) );
 const showErrorMessage = ref( false );
+onMounted( async () =>
+{
+    if( !( await serverRunning() ) )
+    {
+        showErrorMessage.value = true;
+    }
+} );
 const onEndDrag = () =>
 {
     drag.value = false;

@@ -1,4 +1,14 @@
 <template>
+  <v-card
+      v-if="showErrorMessage"
+      color="error"
+      width="300"
+      class="pa-4"
+      style="position:fixed;top:20px;right:20px;z-index:99999999"
+      @click="showErrorMessage = false"
+  >
+    An error occurred connecting to the development server - is it running?
+  </v-card>
   <v-dialog v-model="showImagePicker">
     <PImagePicker class="w-100" v-if="showImagePicker" :galleryId="curGallery" @close="showImagePicker = false"
                   @select="image => setTitleImage( curGallery, image )"/>
@@ -55,15 +65,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import draggable from "vuedraggable";
 import useGallery from "../../composables/useGallery";
 import type { GalleryImage, Gallery } from "../../index.d";
 import PImagePicker from "../edit/PImagePicker.vue";
 import PGalleryEditor from "../edit/PGalleryEditor.vue";
 import PTitleImage from "../gallery/PTitleImage.vue";
-
+import useDev from "../../composables/useDev";
+const showErrorMessage = ref( false );
 const { allGalleries, galleryList, initialize } = useGallery();
+const { serverRunning } = useDev()
 const drag = ref( false );
 const dragStyle = computed( () =>
 {
@@ -75,6 +87,13 @@ const showGalleryEditor = ref( false );
 const showMessage = ref( false );
 const messageColor = ref( "primary" );
 const messageText = ref( "" );
+onMounted( async () =>
+{
+    if( !( await serverRunning() ) )
+    {
+        showErrorMessage.value = true;
+    }
+} );
 const onDragEnd = async() =>
 {
     drag.value = false;
@@ -117,12 +136,11 @@ const initializeGallery = async( galleryId : string ) =>
         messageText.value = "Album initialized.";
         messageColor.value = "primary";
         showMessage.value = true;
-    } catch( e )
+    }
+    catch( e )
     {
         console.error( e );
-        messageText.value = "Operation failed. Is the server on?";
-        messageColor.value = "error";
-        showMessage.value = true;
+        showErrorMessage.value = true;
     }
 };
 const save = async() =>
@@ -135,18 +153,26 @@ const save = async() =>
             gallery.titleImage.description = `${ allGalleries.value.get( gallery.id ).length } photos`
         }
     } );
-    const res = await fetch( "http://localhost:8080/update-index", {
-        method : "POST",
-        headers : {
-            "content-type" : "application/json"
-        },
-        body : JSON.stringify( galleryList.value )
-    } );
-    const result = await res.json();
-    if( result.result !== "success" )
+    try
     {
-        console.error( "Error saving galleries:", result );
-        alert( "An error occurred. Is the server running?" );
+        const res = await fetch( "http://localhost:8080/update-index", {
+            method : "POST",
+            headers : {
+                "content-type" : "application/json"
+            },
+            body : JSON.stringify( galleryList.value )
+        } );
+        const result = await res.json();
+        if( result.result !== "success" )
+        {
+            console.error( "Error saving galleries:", result );
+            showErrorMessage.value = true;
+        }
+    }
+    catch( e )
+    {
+        console.error( "Error saving galleries:", e );
+        showErrorMessage.value = true;
     }
 }
 </script>
