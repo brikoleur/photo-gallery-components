@@ -56,8 +56,8 @@
               </div>
             </div>
             <v-img eager contain :lazy-src="getImagePath( image, true )" :src="getImagePath( image, false )" :max-height="imgMaxHeight"/>
-            <div :style="`height:${MARGIN_Y}px;margin-top:-16px;`">
-              <div class="text-h5 mt-4 mb-1">{{ image.title }}</div>
+            <div :style="`height:${MARGIN_Y}px;margin-top:-16px;`" class="text-center pt-8">
+              <div class="text-h6 mb-1">{{ image.title }}</div>
               <div class="text-body-2">{{ image.description }}</div>
             </div>
           </v-col>
