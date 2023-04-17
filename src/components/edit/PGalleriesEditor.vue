@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="showImagePicker">
     <PImagePicker class="w-100" v-if="showImagePicker" :galleryId="curGallery" @close="showImagePicker = false"
-                  @select="image => setGalleryImage( curGallery, image )"/>
+                  @select="image => setTitleImage( curGallery, image )"/>
   </v-dialog>
   <v-dialog v-model="showGalleryEditor">
     <PGalleryEditor v-if="showGalleryEditor" :gallery-name="curGallery" @close="showGalleryEditor = false"/>
@@ -90,7 +90,7 @@ const openGalleryEditor = async( galleryId : string ) =>
     curGallery.value = galleryId;
     showGalleryEditor.value = true;
 }
-const setGalleryImage = ( galleryId : string, image : GalleryImage ) =>
+const setTitleImage = ( galleryId : string, image : GalleryImage ) =>
 {
     const gallery = galleryList.value.find( ( entity : Gallery ) => entity.id === galleryId );
     if( !gallery ) throw new Error( `Gallery ${ galleryId } not found!` );
