@@ -2,17 +2,18 @@
   <v-card
       v-if="showCarousel"
       ref="carousel"
-      :class="`fill-screen carousel ${carouselClass} fill-height justify-center py-8 px-8`"
+      :class="`fill-screen carousel ${carouselClass} fill-height align-center py-8 px-8`"
   >
-
-    <PCarousel
-        :gallery-index="props.galleryIndex"
-        :is-embedded="true"
-        :open-to="props.galleryIndex.indexOf( currentImage )"
-        closable
-        class="fill-screen"
-        @close="closeImage"
-    />
+    <v-row align="center" class="fill-height">
+      <PCarousel
+          :gallery-index="props.galleryIndex"
+          :is-embedded="true"
+          :open-to="props.galleryIndex.indexOf( currentImage )"
+          closable
+          class="fill-screen"
+          @close="closeImage"
+      />
+    </v-row>
   </v-card>
   <v-card
       v-else-if="showEditor"

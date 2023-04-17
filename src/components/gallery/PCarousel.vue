@@ -1,8 +1,4 @@
 <template>
-  <!-- preload thumbnails -->
-  <div style="position:absolute;bottom:0;right:0;width:1px;height:1px;visibility:hidden;">
-    <img v-for="image of props.galleryIndex" :key="image.thumbnail" :src="getImagePath( image, true )" alt=""/>
-  </div>
   <v-card
     v-if="showEditor"
     flat
@@ -37,34 +33,38 @@
       v-model="current"
       hide-delimiters
       continuous
+      class="mx-auto fill-height"
       :height="dimensions.height"
-      :style="dimensions.width && `margin-left:auto;margin-right:auto;max-width: ${dimensions.width}px`"
+      :style="dimensions.width && `max-width: ${dimensions.width}px`"
     >
       <v-window-item
         v-for="image of props.galleryIndex"
         :key="image.filename"
+        style="overflow:hidden"
+        class="fill-height"
       >
-        <v-card class="fill-height">
-          <v-row class="align-center">
-            <v-col cols="1" class="text-center">
-              <v-icon icon="mdi-chevron-left" @click="prev"/>
-            </v-col>
-            <v-col>
-              <v-sheet :height="MARGIN_Y">
-              </v-sheet>
-              <v-sheet>
-              <v-img eager contain :lazy-src="getImagePath( image, true )" :src="getImagePath( image, false )" :max-height="imgMaxHeight"/>
-              </v-sheet>
-              <v-sheet :height="MARGIN_Y" class="text-center">
-                <div class="text-h5 mt-4 mb-1">{{ image.title }}</div>
-                <div class="text-body-2">{{ image.description }}</div>
-              </v-sheet>
-            </v-col>
-            <v-col cols="1" class="text-center">
-              <v-icon icon="mdi-chevron-right" @click="next"/>
-            </v-col>
-          </v-row>
-        </v-card>
+        <v-row class="align-center fill-height">
+          <v-col cols="1" class="text-center">
+            <v-icon icon="mdi-chevron-left" @click="prev"/>
+          </v-col>
+          <v-col>
+            <div :style="`height:${MARGIN_Y}px;margin-top:-22px;`">
+              <div style="visibility: hidden">
+                <!-- Preload adjacent thumbnails -->
+                <img width="1" height="1" :src="adjacentThumbnail( image, -1 )" alt =""/>
+                <img width="1" height="1" :src="adjacentThumbnail( image, 1 )" alt=""/>
+              </div>
+            </div>
+            <v-img eager contain :lazy-src="getImagePath( image, true )" :src="getImagePath( image, false )" :max-height="imgMaxHeight"/>
+            <div :style="`height:${MARGIN_Y}px;margin-top:-16px;`">
+              <div class="text-h5 mt-4 mb-1">{{ image.title }}</div>
+              <div class="text-body-2">{{ image.description }}</div>
+            </div>
+          </v-col>
+          <v-col cols="1" class="text-center">
+            <v-icon icon="mdi-chevron-right" @click="next"/>
+          </v-col>
+        </v-row>
       </v-window-item>
     </v-window>
   </v-card>
@@ -118,6 +118,14 @@ const isDev = import.meta.env.DEV;
 const showEditor = ref( false );
 const current = ref( props.openTo );
 const MARGIN_Y = props.showText ? 150 : 0;
+const adjacentThumbnail = ( image, d ) =>
+{
+    const c = props.galleryIndex.indexOf( image );
+    let i = c + d;
+    if( i < 0 ) i = props.galleryIndex.length - 1;
+    if( i === props.galleryIndex.length ) i = 0;
+    return getImagePath( props.galleryIndex[ i ], true );
+}
 const next = () => {
     current.value += 1;
     if( current.value === props.galleryIndex.length ) current.value = 0;
