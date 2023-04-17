@@ -55,10 +55,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import draggable from "vuedraggable";
 import useGallery from "../../composables/useGallery";
-import type { GalleryImage, Gallery } from "../../index";
+import type { GalleryImage, Gallery } from "../../index.d";
 import PImagePicker from "../edit/PImagePicker.vue";
 import PGalleryEditor from "../edit/PGalleryEditor.vue";
 import PTitleImage from "../gallery/PTitleImage.vue";
@@ -70,7 +70,6 @@ const dragStyle = computed( () =>
     return drag.value ? "cursor:grabbing" : "cursor:grab"
 } );
 const curGallery = ref( "" );
-const curGalleryIndex = ref( [] );
 const showImagePicker = ref( false );
 const showGalleryEditor = ref( false );
 const showMessage = ref( false );
@@ -95,8 +94,7 @@ const setGalleryImage = ( galleryId : string, image : GalleryImage ) =>
 {
     const gallery = galleryList.value.find( ( entity : Gallery ) => entity.id === galleryId );
     if( !gallery ) throw new Error( `Gallery ${ galleryId } not found!` );
-    const imageClone = JSON.parse( JSON.stringify( image ) );
-    gallery.titleImage = imageClone;
+    gallery.titleImage = JSON.parse( JSON.stringify( image ) );
     showImagePicker.value = false;
     save();
 }

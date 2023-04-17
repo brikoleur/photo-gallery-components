@@ -16,8 +16,14 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
-  "types": "src/index.d.ts",
-  "main": "index.ts",
+  "exports": {
+    ".": {
+      "import" : {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.ts"
+      }
+    }
+  },
   "dependencies": {
     "@mdi/font": "^7.2.96",
     "vue": "^3.2.47",

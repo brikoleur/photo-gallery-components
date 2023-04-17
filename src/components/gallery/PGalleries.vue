@@ -11,12 +11,13 @@
 import useGallery from "../../composables/useGallery";
 import PTitleImage from "../gallery/PTitleImage.vue";
 import { inject } from 'vue'
-import type { Gallery } from "../../index";
+import type { Gallery } from "../../index.d";
+import type { Router } from "vue-router";
 const { galleryList } = useGallery();
-const router = inject( "router" );
+const router : Router | undefined = inject( "router" );
 const openGallery = ( galleryInfo : Gallery ) =>
 {
-    router.push( {
+    router?.push( {
         name : "gallery",
         query : { gallery : galleryInfo.id }
     } );

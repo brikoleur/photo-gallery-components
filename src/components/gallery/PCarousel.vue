@@ -43,11 +43,11 @@
         style="overflow:hidden"
         class="fill-height"
       >
-        <v-row class="align-center fill-height">
-          <v-col cols="1" class="text-center">
+        <v-row class="align-center fill-height" no-gutters>
+          <v-col cols="1" class="text-right pa-1">
             <v-icon icon="mdi-chevron-left" @click="prev"/>
           </v-col>
-          <v-col>
+          <v-col class="justify-center text-center pa-1">
             <div :style="`height:${MARGIN_Y}px;margin-top:-22px;`">
               <div style="visibility: hidden">
                 <!-- Preload adjacent thumbnails -->
@@ -61,7 +61,7 @@
               <div class="text-body-2">{{ image.description }}</div>
             </div>
           </v-col>
-          <v-col cols="1" class="text-center">
+          <v-col cols="1" class="text-left pa-1">
             <v-icon icon="mdi-chevron-right" @click="next"/>
           </v-col>
         </v-row>

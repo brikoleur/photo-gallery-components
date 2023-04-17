@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import useGallery from "../../composables/useGallery";
-import type { GalleryImage } from "../../index";
+import type { GalleryImage } from "../../index.d";
 import { computed, PropType } from "vue";
 const props = defineProps( {
     imageInfo : {
