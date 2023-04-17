@@ -139,7 +139,7 @@ const closeEditor = () =>
 {
     showEditor.value = false;
 };
-
+const galleryName = computed( () => props.galleryIndex[ current.value ].gallery )
 const dimensions = computed( () =>
 {
     const dims = {};
