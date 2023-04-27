@@ -1,3 +1,4 @@
+import type { App } from "vue";
 import PGalleriesEditor from "./components/edit/PGalleriesEditor.vue";
 import PGalleryEditor from "./components/edit/PGalleryEditor.vue";
 import PImagePicker from "./components/edit/PImagePicker.vue";
@@ -7,7 +8,7 @@ import PMosaic from "./components/gallery/PMosaic.vue";
 import PTitleImage from "./components/gallery/PTitleImage.vue";
 export default {
     name : "PhotoGalleryComponents",
-    install( app )
+    install( app: App )
     {
         app.component( "PGalleriesEditor", PGalleriesEditor );
         app.component( "PGalleryEditor", PGalleryEditor );

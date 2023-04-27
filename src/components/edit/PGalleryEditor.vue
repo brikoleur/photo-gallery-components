@@ -53,7 +53,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import draggable from "vuedraggable";
 import { computed, onMounted, ref } from "vue";
 import useGallery from "../../composables/useGallery";

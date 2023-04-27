@@ -70,7 +70,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import PGalleryEditor from "../edit/PGalleryEditor.vue";
