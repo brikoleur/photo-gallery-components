@@ -2,7 +2,7 @@
   <v-sheet class="position-relative" color="transparent" :width="props.width" :height="props.height" :rounded="0">
     <v-img cover :src="imageSource" :max-height="props.height" :aspect-ratio="1"/>
     <v-btn type="fab" variant="outlined" v-if="props.editable" color="white" icon="mdi-file-image" @click="$emit( 'edit' )" @click.stop style="position:absolute;top:20px;right:20px;"/>
-    <div class="gallery-text text-white pa-4 pt-8">
+    <div class="gallery-text content-text text-white pa-4 pt-8">
       <div class="text-h6">{{ props.imageInfo.title }}</div>
       <div class="text-body-2">{{ props.imageInfo.description }}</div>
     </div>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main class="p-background">
-      <v-sheet v-if="currentGallery" :max-width="1800" :height="275" class="mx-auto" color="transparent">
+      <v-sheet v-if="currentGallery" :max-width="1800" :height="275" class="mx-auto content-text" color="transparent">
         <v-img cover :src="getImagePath( currentGallery.titleImage, false )" class="album-title-image"/>
         <div class="gallery-text text-white mx-auto pa-4 pt-6 pl-8" style="max-width:1800px">
           <div class="text-h6">{{ currentGallery.title }}</div>
@@ -24,7 +24,7 @@
         <v-col cols="3">
           <v-img cover :src="randomImages[ 3 ]" height="275" class="image-class"/>
         </v-col>
-        <div class="gallery-text">
+        <div class="gallery-text content-text">
           <div class="text-white mx-auto" style="position:relative;height:100px;max-width:1800px;">
             <div>
               <v-avatar image="assets/profile.jpeg" :size="80" class="float-left ma-2"/>
